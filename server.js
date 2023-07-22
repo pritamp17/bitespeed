@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 // Register contact routes
 app.use('/contacts', routes);
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

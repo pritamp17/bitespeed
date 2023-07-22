@@ -129,6 +129,19 @@ exports.deleteContact = (id) => {
   });
 };
 
+exports.getContactById = (id) => {
+  return new Promise((resolve, reject) => {
+    // Perform database query to get a contact by its ID
+    db.get('SELECT * FROM Contact WHERE id = ?', [id], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+};
+
 exports.getAllContacts = () => {
   return new Promise((resolve, reject) => {
     // Perform database query to get all contacts
