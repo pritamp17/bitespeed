@@ -25,7 +25,7 @@ exports.getContactByEmailOrPhoneNumber = (email, phoneNumber) => {
   });
 };
 
-exports.getSecondaryContacts = (primaryContactId) => {
+exports.getSecondaryContactsByLinkedId = (primaryContactId) => {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM Contact WHERE linkedId = ?', [primaryContactId], (err, rows) => {
       if (err) {
@@ -79,7 +79,6 @@ exports.createSecondaryContact = (email, phoneNumber, linkedId) => {
 
 exports.createPrimaryContact = (email, phoneNumber) => {
   return new Promise((resolve, reject) => {
-    // Perform database query to create a new primary contact
     db.run('INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence) VALUES (?, ?, NULL, "primary")', [phoneNumber, email], function(err) {
       if (err) {
         reject(err);
@@ -92,7 +91,6 @@ exports.createPrimaryContact = (email, phoneNumber) => {
 
 exports.createSecondaryContact = (email, phoneNumber,linkedId) => {
   return new Promise((resolve, reject) => {
-    // create a new secondary contact
     db.run('INSERT INTO Contact (phoneNumber, email, linkedId, linkPrecedence) VALUES (?, ?, ?, "secondary")', [phoneNumber, email, linkedId], function(err) {
       if (err) {
         reject(err);
@@ -105,7 +103,6 @@ exports.createSecondaryContact = (email, phoneNumber,linkedId) => {
 
 exports.updateContact = (id, email, phoneNumber) => {
   return new Promise((resolve, reject) => {
-    // Perform database query to update a contact
     db.run('UPDATE Contact SET email = ?, phoneNumber = ? WHERE id = ?', [email, phoneNumber, id], function(err) {
       if (err) {
         reject(err);
@@ -118,7 +115,6 @@ exports.updateContact = (id, email, phoneNumber) => {
 
 exports.deleteContact = (id) => {
   return new Promise((resolve, reject) => {
-    // Perform database query to delete a contact
     db.run('DELETE FROM Contact WHERE id = ?', [id], function(err) {
       if (err) {
         reject(err);
@@ -131,7 +127,6 @@ exports.deleteContact = (id) => {
 
 exports.getContactById = (id) => {
   return new Promise((resolve, reject) => {
-    // Perform database query to get a contact by its ID
     db.get('SELECT * FROM Contact WHERE id = ?', [id], (err, row) => {
       if (err) {
         reject(err);
@@ -144,8 +139,56 @@ exports.getContactById = (id) => {
 
 exports.getAllContacts = () => {
   return new Promise((resolve, reject) => {
-    // Perform database query to get all contacts
     db.all('SELECT * FROM Contact', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+exports.updateContactLinkPrecedence = (contactId, linkPrecedence) => {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE Contact SET linkPrecedence = ? WHERE id = ?', [linkPrecedence, contactId], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+exports.updateContactUpdatedAt = (contactId) => {
+  return new Promise((resolve, reject) => {
+    const currentTime = new Date().toISOString();
+    db.run('UPDATE Contact SET updatedAt = ? WHERE id = ?', [currentTime, contactId], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+exports.getPrimaryContactsByEmailOrPhoneNumber = (email, phoneNumber) => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM Contact WHERE (email = ? OR phoneNumber = ?) AND linkPrecedence = "primary"', [email, phoneNumber], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+exports.getSecondaryContactsByEmailOrPhoneNumber = (email, phoneNumber) => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM Contact WHERE (email = ? OR phoneNumber = ?) AND linkPrecedence = "secondary"', [email, phoneNumber], (err, rows) => {
       if (err) {
         reject(err);
       } else {
