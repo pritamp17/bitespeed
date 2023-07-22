@@ -8,10 +8,9 @@ const port = 3016;
 // Middleware for parsing JSON
 app.use(bodyParser.json());
 
-// Register contact routes
+// Registering contact routes
 app.use('/contacts', routes);
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
