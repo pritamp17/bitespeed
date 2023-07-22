@@ -15,3 +15,4 @@
   	"phoneNumber": "123456"
   }
   ```
+* getAllUsers -> `GET http://localhost:3016/contacts/getall`
