@@ -25,9 +25,9 @@ exports.getContactByEmailOrPhoneNumber = (email, phoneNumber) => {
   });
 };
 
-exports.getSecondaryContacts = (primaryContactId, contactId) => {
+exports.getSecondaryContacts = (primaryContactId) => {
   return new Promise((resolve, reject) => {
-    db.all('SELECT * FROM Contact WHERE linkedId = ? AND id != ?', [primaryContactId, contactId], (err, rows) => {
+    db.all('SELECT * FROM Contact WHERE linkedId = ?', [primaryContactId], (err, rows) => {
       if (err) {
         reject(err);
       } else {
