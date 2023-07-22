@@ -15,6 +15,12 @@ exports.getContactInfo = async (req, res) => {
 
       // Find secondary contacts with linkedId equal to primary contact ID
       const secondaryContacts = await contactModel.getSecondaryContacts(primaryContactId);
+      console.log(secondaryContacts);
+      if(secondaryContacts.length == 0 && !(row.linkPrecedence == "primary" && row.email == email && row.phoneNumber == phoneNumber)){
+        contactModel.createSecondaryContact(email,phoneNumber,primaryContactId);
+        const contacts = await contactModel.getAllContacts();
+        res.status(200).json(contacts); 
+      }else{
 
       secondaryContacts.forEach((secondaryContact) => {
         if (secondaryContact.linkedId === primaryContactId) {
@@ -53,7 +59,8 @@ exports.getContactInfo = async (req, res) => {
           secondaryContactIds: secondaryContactIds,
         },
       });
-    } else {
+    } 
+  }else {
       // Create a new primary contact
       const result = await contactModel.createPrimaryContact(email, phoneNumber);
       const primaryContactId = result.primaryContactId;
@@ -69,7 +76,7 @@ exports.getContactInfo = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
