@@ -1,0 +1,10 @@
+version: '1'
+services:
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3016:3016'
+    volumes:
+      - ./users.db:/app/users.db
