@@ -1,11 +1,18 @@
 # bitespeed
 
-**PROJECT SETUP**
+## **Tech stack**
+
+* NodeJs
+* sqlite3
+
+## **PROJECT SETUP**
 
 * clone this repo
 * cd to project dir
 * run `docker-compose build`
-* then `docker-compose up`
+* then `docker-compose up `
+* Done 👍✌
+* getAllUsers -> `GET http://localhost:3016/contacts/getall`
 * make `POST `request to ` http://localhost:3016/contacts/identify`
 * request format
 
@@ -15,4 +22,7 @@
   	"phoneNumber": "123456"
   }
   ```
-* getAllUsers -> `GET http://localhost:3016/contacts/getall`
+
+#### Resume 
+
+* [Google Drive Link](https://drive.google.com/file/d/1UnQZlTWhNd-wbxgd-SaLMdBV1k8DASUI/view?usp=sharing)
